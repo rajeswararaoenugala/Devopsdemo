@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flavora — Taste the Extraordinary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --orange: #ff6b35;
+            --dark: #1d1d1d;
+            --cream: #fffaf4;
+            --muted: #777;
+            --green: #6d8b74;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: "DM Sans", sans-serif;
+            color: var(--dark);
+            background: #fff;
+            overflow-x: hidden;
+        }
+        img { display: block; width: 100%; }
+        a { color: inherit; text-decoration: none; }
+        button, input { font: inherit; }
+
+        .container { width: min(1180px, 90%); margin-inline: auto; }
+
+        header {
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,.96);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,.06);
+        }
+        nav { height: 78px; display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-family: "Playfair Display", serif; font-size: 27px; font-weight: 700; }
+        .logo span { color: var(--orange); }
+        .nav-links { display: flex; align-items: center; gap: 34px; list-style: none; }
+        .nav-links a { font-size: 15px; font-weight: 600; transition: .2s; }
+        .nav-links a:hover { color: var(--orange); }
+        .nav-actions { display: flex; align-items: center; gap: 12px; }
+        .cart-btn, .menu-toggle {
+            border: 0;
+            background: none;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        .cart-btn { position: relative; font-size: 19px; width: 42px; height: 42px; }
+        .cart-count {
+            position: absolute;
+            right: 0;
+            top: 1px;
+            min-width: 18px;
+            height: 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 20px;
+            background: var(--orange);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .menu-toggle { display: none; font-size: 21px; }
+
+        .hero {
+            min-height: 680px;
+            padding-top: 78px;
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            right: -120px;
+            top: 80px;
+            border-radius: 50%;
+            background: #ffe2ce;
+        }
+        .hero-grid { display: grid; grid-template-columns: 48% 52%; align-items: center; }
+        .eyebrow { color: var(--orange); text-transform: uppercase; letter-spacing: 3px; font-size: 13px; font-weight: 700; }
+        .hero h1 {
+            font-family: "Playfair Display", serif;
+            font-size: clamp(56px, 7vw, 86px);
+            line-height: .98;
+            margin: 20px 0 24px;
+        }
+        .hero h1 em { color: var(--orange); font-style: italic; }
+        .hero-copy { max-width: 500px; color: #686868; line-height: 1.75; font-size: 17px; }
+        .hero-buttons { display: flex; gap: 14px; margin-top: 32px; }
+        .btn {
+            border: 0;
+            border-radius: 8px;
+            padding: 15px 24px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+        .btn-primary { background: var(--orange); color: #fff; box-shadow: 0 10px 24px rgba(255,107,53,.25); }
+        .btn-secondary { background: #fff; color: var(--dark); border: 1px solid #ddd; }
+        .btn:hover { transform: translateY(-2px); }
+        .hero-image { position: relative; z-index: 2; }
+        .hero-image img {
+            width: 580px;
+            max-width: 110%;
+            height: 530px;
+            object-fit: cover;
+            border-radius: 52% 48% 46% 54% / 45% 48% 52% 55%;
+            filter: drop-shadow(0 24px 30px rgba(105,69,42,.18));
+        }
+
+        section { padding: 90px 0; }
+        .section-heading { text-align: center; margin-bottom: 42px; }
+        .section-heading h2 { font-family: "Playfair Display", serif; font-size: 42px; margin: 8px 0 10px; }
+        .section-heading p { color: var(--muted); }
+
+        .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .category-card {
+            height: 210px;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+        .category-card img { height: 100%; object-fit: cover; transition: .4s; }
+        .category-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 45%, rgba(0,0,0,.7)); }
+        .category-card h3 { position: absolute; z-index: 2; bottom: 20px; left: 20px; color: white; }
+        .category-card:hover img { transform: scale(1.06); }
+
+        .menu-section { background: #fcfcfc; }
+        .filters { display: flex; justify-content: center; gap: 8px; margin-bottom: 36px; }
+        .filter-btn { border: 1px solid #e5e5e5; background: white; color: #555; border-radius: 30px; padding: 9px 18px; cursor: pointer; }
+        .filter-btn.active { background: var(--dark); border-color: var(--dark); color: white; }
+        .food-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .food-card { background: white; border: 1px solid #eee; border-radius: 14px; overflow: hidden; transition: .25s; }
+        .food-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,.08); }
+        .food-card-image { height: 230px; overflow: hidden; }
+        .food-card-image img { height: 100%; object-fit: cover; }
+        .food-info { padding: 18px; }
+        .food-info h3 { font-family: "Playfair Display", serif; font-size: 21px; }
+        .food-info p { color: var(--muted); font-size: 14px; margin: 7px 0 16px; }
+        .food-bottom { display: flex; align-items: center; justify-content: space-between; }
+        .price { color: var(--orange); font-size: 20px; font-weight: 800; }
+        .add-cart { width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--orange); color: white; cursor: pointer; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .feature { text-align: center; padding: 20px; }
+        .feature-icon { width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 50%; display: grid; place-items: center; background: #fff1e9; color: var(--orange); font-size: 25px; }
+        .feature h3 { margin-bottom: 8px; }
+        .feature p { color: var(--muted); line-height: 1.7; }
+
+        .reviews { background: var(--cream); }
+        .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .review-card { background: white; border-radius: 12px; padding: 28px; }
+        .stars { color: #ffc43d; margin-bottom: 14px; }
+        .review-card > p { color: #666; line-height: 1.7; }
+        .reviewer { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+        .reviewer img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; }
+        .reviewer strong { display: block; }
+        .reviewer span { color: var(--muted); font-size: 13px; }
+
+        .newsletter { background: var(--dark); color: white; padding: 55px 0; }
+        .newsletter-inner { display: flex; justify-content: space-between; align-items: center; }
+        .newsletter h2 { font-family: "Playfair Display", serif; font-size: 32px; }
+        .newsletter p { color: #bbb; margin-top: 5px; }
+        .subscribe-form { display: flex; width: 430px; }
+        .subscribe-form input { flex: 1; border: 0; border-radius: 8px 0 0 8px; padding: 15px 18px; outline: none; }
+        .subscribe-form button { border: 0; border-radius: 0 8px 8px 0; background: var(--orange); color: white; padding: 0 20px; cursor: pointer; }
+
+        footer { padding: 28px 0; text-align: center; color: #777; font-size: 14px; }
+
+        .cart-modal {
+            position: fixed;
+            z-index: 200;
+            inset: 0;
+            background: rgba(0,0,0,.45);
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            visibility: hidden;
+            transition: .25s;
+        }
+        .cart-modal.show { opacity: 1; visibility: visible; }
+        .cart-panel { width: min(420px, 92%); height: 100%; background: white; padding: 24px; transform: translateX(100%); transition: .25s; display: flex; flex-direction: column; }
+        .cart-modal.show .cart-panel { transform: translateX(0); }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid #eee; }
+        .cart-header button { border: 0; background: none; font-size: 20px; cursor: pointer; }
+        .cart-items { flex: 1; overflow-y: auto; padding: 16px 0; }
+        .empty-cart { text-align: center; color: var(--muted); padding-top: 40px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 14px 0; }
+        .cart-item h4 { font-size: 15px; }
+        .cart-item p { color: var(--orange); font-weight: 700; margin-top: 4px; }
+        .quantity-controls { display: flex; align-items: center; gap: 10px; }
+        .quantity-controls button { width: 28px; height: 28px; border: 1px solid #ddd; border-radius: 50%; background: white; cursor: pointer; }
+        .cart-footer { border-top: 1px solid #eee; padding-top: 18px; }
+        .cart-total-row { display: flex; justify-content: space-between; font-size: 20px; font-weight: 800; margin-bottom: 14px; }
+        .checkout-btn { width: 100%; }
+
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: absolute;
+                top: 78px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                gap: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: .25s;
+                box-shadow: 0 12px 20px rgba(0,0,0,.08);
+            }
+            .nav-links.active { max-height: 300px; padding: 12px 0; }
+            .nav-links li { width: 100%; text-align: center; }
+            .nav-links a { display: block; padding: 13px; }
+            .hero { min-height: auto; padding: 120px 0 70px; }
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero-image { margin-top: 35px; text-align: center; }
+            .hero-image img { width: 500px; height: 440px; margin: auto; }
+            .categories-grid, .food-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid, .reviews-grid { grid-template-columns: 1fr; }
+            .newsletter-inner { flex-direction: column; text-align: center; gap: 24px; }
+        }
+
+        @media (max-width: 560px) {
+            .container { width: 92%; }
+            nav { height: 68px; }
+            .nav-links { top: 68px; }
+            .hero { padding-top: 105px; }
+            .hero h1 { font-size: 52px; }
+            .hero-copy { font-size: 15px; }
+            .hero-image img { height: 330px; }
+            section { padding: 65px 0; }
+            .section-heading h2 { font-size: 34px; }
+            .categories-grid, .food-grid { grid-template-columns: 1fr; }
+            .category-card { height: 240px; }
+            .filters { flex-wrap: wrap; }
+            .subscribe-form { width: 100%; }
+            .newsletter-inner { align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a class="logo" href="#home">Flavora<span>.</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="cart-btn" aria-label="Open shopping cart">
+                    <i class="fas fa-bag-shopping"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="container hero-grid">
+                <div>
+                    <span class="eyebrow">Fresh. Local. Delicious.</span>
+                    <h1>Taste the <em>extraordinary.</em></h1>
+                    <p class="hero-copy">Discover chef-crafted favorites made with the freshest ingredients and delivered straight to your table.</p>
+                    <div class="hero-buttons">
+                        <a class="btn btn-primary" href="#menu">Explore Menu</a>
+                        <a class="btn btn-secondary" href="#categories">Our Specialties</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85" alt="A colorful gourmet dish">
+                </div>
+            </div>
+        </section>
+
+        <section id="categories">
+            <div class="container">
+                <div class="section-heading">
+                    <span class="eyebrow">Explore</span>
+                    <h2>Popular Categories</h2>
+                    <p>Something for every craving</p>
+                </div>
+                <div class="categories-grid">
+                    <article class="category-card"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Pizza"><h3>Pizza</h3></article>
+                    <article class="category-card"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" alt="Burgers"><h3>Burgers</h3></article>
+                    <article class="category-card"><img src="https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=600&q=80" alt="Sushi"><h3>Sushi</h3></article>
+                    <article class="category-card"><img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=600&q=80" alt="Healthy bowls"><h3>Healthy</h3></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-section" id="menu">
+            <div class="container">
+                <div class="section-heading">
+                    <span class="eyebrow">Our Menu</span>
+                    <h2>Chef's Favorites</h2>
+                    <p>Made fresh, served happy</p>
+                </div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="pizza">Pizza</button>
+                    <button class="filter-btn" data-filter="burger">Burgers</button>
+                    <button class="filter-btn" data-filter="sushi">Sushi</button>
+                    <button class="filter-btn" data-filter="healthy">Healthy</button>
+                </div>
+                <div class="food-grid">
+                    <article class="food-card" data-category="pizza">
+                        <div class="food-card-image"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=700&q=80" alt="Margherita pizza"></div>
+                        <div class="food-info"><h3>Garden Margherita</h3><p>Tomato, fresh basil, mozzarella</p><div class="food-bottom"><span class="price">$14.90</span><button class="add-cart" data-name="Garden Margherita" data-price="14.90" aria-label="Add Garden Margherita to cart"><i class="fas fa-plus"></i></button></div></div>
+                    </article>
+                    <article class="food-card" data-category="burger">
+                        <div class="food-card-image"><img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=700&q=80" alt="Classic burger"></div>
+                        <div class="food-info"><h3>Smoky Stack Burger</h3><p>Beef, cheddar, pickles, special sauce</p><div class="food-bottom"><span class="price">$12.50</span><button class="add-cart" data-name="Smoky Stack Burger" data-price="12.50" aria-label="Add Smoky Stack Burger to cart"><i class="fas fa-plus"></i></button></div></div>
+                    </article>
+                    <article class="food-card" data-category="sushi">
+                        <div class="food-card-image"><img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=700&q=80" alt="Sushi rolls"></div>
+                        <div class="food-info"><h3>Signature Sushi Set</h3><p>Salmon, tuna, avocado, nori</p><div class="food-bottom"><span class="price">$18.90</span><button class="add-cart" data-name="Signature Sushi Set" data-price="18.90" aria-label="Add Signature Sushi Set to cart"><i class="fas fa-plus"></i></button></div></div>
+                    </article>
+                    <article class="food-card" data-category="healthy">
+                        <div class="food-card-image"><img src="https://images.unsplash://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=700&q=80" alt="Green bowl"></div>
+                        <div class="food-info"><h3>Harvest Energy Bowl</h3><p>Quinoa, greens, avocado, roasted vegetables</p><div class="food-bottom"><span class="price">$13.40</span><button class="add-cart" data-name="Harvest Energy Bowl" data-price="13.40" aria-label="Add Harvest Energy Bowl to cart"><i class="fas fa-plus"></i></button></div></div>
+                    </article>
+                    <article class="food-card" data-category="pizza">
+                        <div class="food-card-image"><img src="https://images.unsplash.com/photo-1566843972142-a7fcb70de5a0?auto=format&fit=crop&w=700&q=80" alt="Pepperoni pizza"></div>
+                        <div class="food-info"><h3>Fire Pepperoni</h3><p>Pepperoni, chilli honey, mozzarella</p><div class="food-bottom"><span class="price">$16.20</span><button class="add-cart" data-name="Fire Pepperoni" data-price="16.20" aria-label="Add Fire Pepperoni to cart"><i class="fas fa-plus"></i></button></div></div>
+                    </article>
+                    <article class="food-card" data-category="burger">
+                        <div class="food-card-image"><img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=700&q=80" alt="Chicken burger"></div>
+                        <div class="food-info"><h3>Crispy Chicken</h3><p>Crispy chicken, slaw, herbs, ranch</p><div class="food-bottom"><span class="price">$11.90</span><button class="add-cart" data-name="Crispy Chicken" data-price="11.90" aria-label="Add Crispy Chicken to cart"><i class="fas fa-plus"></i></button></div></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-heading"><span class="eyebrow">Why Us</span><h2>The Flavora Difference</h2></div>
+                <div class="features-grid">
+                    <article class="feature"><div class="feature-icon"><i class="fas fa-seedling"></i></div><h3>Fresh Ingredients</h3><p>We source seasonal, quality ingredients from trusted local growers.</p></article>
+                    <article class="feature"><div class="feature-icon"><i class="fas fa-utensils"></i></div><h3>Expert Chefs</h3><p>Every plate is thoughtfully prepared by passionate culinary experts.</p></article>
+                    <article class="feature"><div class="feature-icon"><i class="fas fa-bolt"></i></div><h3>Fast Delivery</h3><p>Hot, fresh, and at your door right when you are ready to enjoy.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="reviews" id="reviews">
+            <div class="container">
+                <div class="section-heading"><span class="eyebrow">Testimonials</span><h2>What Food Lovers Say</h2></div>
+                <div class="reviews-grid">
+                    <article class="review-card"><div class="stars">★★★★★</div><p>“The Garden Margherita was incredibly fresh. It has officially become my Friday night favorite.”</p><div class="reviewer"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80" alt="Customer"><div><strong>Emma Wilson</strong><span>Verified diner</span></div></div></article>
+                    <article class="review-card"><div class="stars">★★★★★</div><p>“Beautiful presentation, quick delivery, and the sushi was as good as at a top restaurant.”</p><div class="reviewer"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80" alt="Customer"><div><strong>Daniel Lee</strong><span>Verified diner</span></div></div></article>
+                    <article class="review-card"><div class="stars">★★★★★</div><p>“A burger that actually tastes homemade. Great flavors and generous, quality ingredients.”</p><div class="reviewer"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80" alt="Customer"><div><strong>Sofia Chen</strong><span>Verified diner</span></div></div></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="newsletter">
+            <div class="container newsletter-inner">
+                <div><h2>Get fresh offers in your inbox</h2><p>Join our community and enjoy 10% off your first order.</p></div>
+                <form class="subscribe-form" id="subscribeForm"><input type="email" id="email" placeholder="Your email address" required><button type="submit">Subscribe</button></form>
+            </div>
+        </section>
+    </main>
+
+    <footer><div class="container">© 2026 Flavora. Crafted with care.</div></footer>
+
+    <div class="cart-modal" id="cartModal" role="dialog" aria-modal="true" aria-label="Shopping cart">
+        <aside class="cart-panel">
+            <div class="cart-header"><h2>Your Cart</h2><button id="closeCart" aria-label="Close cart"><i class="fas fa-xmark"></i></button></div>
+            <div class="cart-items" id="cartItems"><p class="empty-cart">Your cart is empty!</p></div>
+            <div class="cart-footer"><div class="cart-total-row"><span>Total</span><span>$<span id="cartTotal">0.00</span></span></div><button class="btn btn-primary checkout-btn" id="checkoutBtn">Checkout</button></div>
+        </aside>
+    </div>
+
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        menuToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            const icon = menuToggle.querySelector("i");
+            icon.classList.toggle("fa-bars");
+            icon.classList.toggle("fa-xmark");
+        });
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("active");
+                const icon = menuToggle.querySelector("i");
+                icon.classList.add("fa-bars");
+                icon.classList.remove("fa-xmark");
+            });
+        });
+
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const foodCards = document.querySelectorAll(".food-card");
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                filterButtons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+                const filter = button.dataset.filter;
+                foodCards.forEach(card => {
+                    card.style.display = (filter === "all" || card.dataset.category === filter) ? "block" : "none";
+                });
+            });
+        });
+
+        let cart = [];
+        const cartModal = document.getElementById("cartModal");
+        const cartItems = document.getElementById("cartItems");
+        const cartCount = document.getElementById("cartCount");
+        const cartTotal = document.getElementById("cartTotal");
+
+        document.querySelectorAll(".add-cart").forEach(button => {
+            button.addEventListener("click", () => {
+                const name = button.dataset.name;
+                const price = Number(button.dataset.price);
+                const existingItem = cart.find(item => item.name === name);
+
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({ name, price, quantity: 1 });
+                }
+
+                updateCart();
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => { button.innerHTML = '<i class="fas fa-plus"></i>'; }, 700);
+            });
+        });
+
+        function updateCart() {
+            cartItems.innerHTML = "";
+            let total = 0;
+            let count = 0;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="empty-cart">Your cart is empty!</p>';
+            }
+
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                count += item.quantity;
+
+                const itemElement = document.createElement("div");
+                itemElement.className = "cart-item";
+                const info = document.createElement("div");
+                const title = document.createElement("h4");
+                title.textContent = item.name;
+                const price = document.createElement("p");
+                price.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
+                info.append(title, price);
+
+                const controls = document.createElement("div");
+                controls.className = "quantity-controls";
+                const minus = document.createElement("button");
+                minus.textContent = "-";
+                minus.setAttribute("aria-label", `Decrease ${item.name}`);
+                minus.addEventListener("click", () => changeQuantity(index, -1));
+                const quantity = document.createElement("span");
+                quantity.textContent = item.quantity;
+                const plus = document.createElement("button");
+                plus.textContent = "+";
+                plus.setAttribute("aria-label", `Increase ${item.name}`);
+                plus.addEventListener("click", () => changeQuantity(index, 1));
+
+                controls.append(minus, quantity, plus);
+                itemElement.append(info, controls);
+                cartItems.appendChild(itemElement);
+            });
+
+            cartCount.textContent = count;
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        function changeQuantity(index, amount) {
+            cart[index].quantity += amount;
+            if (cart[index].quantity <= 0) cart.splice(index, 1);
+            updateCart();
+        }
+
+        document.querySelector(".cart-btn").addEventListener("click", () => {
+            cartModal.classList.add("show");
+        });
+
+        document.getElementById("closeCart").addEventListener("click", () => {
+            cartModal.classList.remove("show");
+        });
+
+        cartModal.addEventListener("click", (event) => {
+            if (event.target === cartModal) cartModal.classList.remove("show");
+        });
+
+        document.getElementById("checkoutBtn").addEventListener("click", () => {
+            if (cart.length === 0) {
+                alert("Your cart is empty! Please add some delicious food.");
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            alert(`Thank you for your order!\nYour total is $${total.toFixed(2)}.\n\nThis is a demo checkout. No payment was processed.`);
+            cart = [];
+            updateCart();
+            cartModal.classList.remove("show");
+        });
+
+        document.getElementById("subscribeForm").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            alert(`Thank you for subscribing!\nYour email: ${email}`);
+            event.target.reset();
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll(".category-card, .food-card, .review-card, .feature").forEach(element => {
+            element.classList.add("reveal");
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
